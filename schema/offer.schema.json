@@ -1,0 +1,45 @@
+{
+  "id": "Offer",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "vatInvoice": {
+      "type": "boolean"
+    },
+    "price": {
+      "type": "number"
+    },
+    "year": {
+      "type": "number"
+    },
+    "mileage": {
+      "type": "number"
+    },
+    "bodyType": {
+      "type": "string"
+    },
+    "fuelType": {
+      "type": "string"
+    },
+    "transmissionType": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "location",
+    "vatInvoice",
+    "price",
+    "year",
+    "mileage",
+    "bodyType",
+    "fuelType",
+    "transmissionType"
+  ],
+  "additionalProperties": false
+}
