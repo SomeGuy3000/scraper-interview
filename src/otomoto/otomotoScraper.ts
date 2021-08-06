@@ -5,8 +5,6 @@ import { Context } from "../models/context.model";
 import { runInPage } from "../scraping/runInPage";
 import { getWatchedOffersTitledLinks, scrapeOffer } from "./otomotoFunctions";
 
-declare var loginForm: HTMLFormElement;
-
 export class OtomotoScraper {
   constructor(private readonly pageFactory: () => Promise<Page>) {}
 
@@ -34,7 +32,7 @@ export class OtomotoScraper {
 
     await Promise.all([
       page.waitForNavigation(),
-      page.evaluate(() => loginForm.submit()),
+      page.evaluate(() => (document.querySelector("[data-testid=sign-in-button]") as HTMLButtonElement).click()),
     ]);
   }
 
