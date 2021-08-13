@@ -3,6 +3,7 @@ import { Credentials } from "./models/credentials.model";
 import { Offer } from "./models/offer.model";
 import { runInBrowser } from "./scraping/runInBrowser";
 import { validateOffers } from "./validation/otomotoValidator";
+require('dotenv').config()
 
 function getEnv(envName: string): string {
   const value = process.env[envName];
@@ -19,7 +20,7 @@ function getEnv(envName: string): string {
     password: getEnv("OTOMOTO_PASSWORD"),
   };
 
-  const offers: Offer[][] = await runInBrowser(async (browser) =>
+  const offers: Offer[] = await runInBrowser(async (browser) =>
     new OtomotoScraper(() => browser.newPage()).scrape(credentials)
   );
 

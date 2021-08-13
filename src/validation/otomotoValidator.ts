@@ -40,7 +40,7 @@ function validateField(
     } else {
       assert.ok(Object.values(type).includes(value));
     }
-  } catch (e) {
+  } catch (e: any) {
     const message = `Invalid value of ${name}: ${type} = ${value}`;
     const stack = new Error(message).stack || "";
     e.stack =

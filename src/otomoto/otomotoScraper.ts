@@ -4,7 +4,6 @@ import { FuelType, Offer, TransmissionType } from "../models/offer.model";
 import { Context } from "../models/context.model";
 import { runInPage } from "../scraping/runInPage";
 import { getWatchedOffersTitledLinks, scrapeOffer } from "./otomotoFunctions";
-
 export class OtomotoScraper {
   constructor(private readonly pageFactory: () => Promise<Page>) {}
 
@@ -16,7 +15,7 @@ export class OtomotoScraper {
     });
   }
 
-  private async scrapeLinks(page, titledLinks: TitledLink[]) {
+  private async scrapeLinks(page: Page, titledLinks: TitledLink[]) {
     const offers: Offer[] = [];
     for (const titledLink of titledLinks) {
       const offer = await this.scrapeOffer(page, titledLink);
@@ -27,12 +26,16 @@ export class OtomotoScraper {
 
   private async login(page: Page, credentials: Credentials) {
     await page.goto("https://www.otomoto.pl/konto/");
-    await page.type("input.userEmail", credentials.username);
-    await page.type("input.userPass", credentials.password);
+    await page.type("#current-email", credentials.username);
+    await page.type("#current-password", credentials.password);
 
     await Promise.all([
       page.waitForNavigation(),
-      page.evaluate(() => (document.querySelector("[data-testid=sign-in-button]") as HTMLButtonElement).click()),
+      page.evaluate(() =>
+        (document.querySelector(
+          "[data-testid=sign-in-button]"
+        ) as HTMLButtonElement).click()
+      ),
     ]);
   }
 

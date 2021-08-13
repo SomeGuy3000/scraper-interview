@@ -13,12 +13,11 @@ export function scrapeOffer(context: Context) {
   const location = getLocation();
   const vatInvoice = getVatInvoice();
   const price = getPrice();
-  const year = getOfferParam("Rok produkcji") as number;
-  const mileage = getOfferParam("Przebieg") as number;
-  const bodyType = getOfferParam("Typ") as string;
+  const year = getParamAsNumber("Rok produkcji") as number;
+  const mileage = getParamAsNumber("Przebieg") as number;
+  const bodyType = getOfferParam("Typ nadwozia") as string;
   const fuelType = getFuelType();
   const transmissionType = getTransmissionType();
-
   return {
     title: context.data.title,
     location,
@@ -45,24 +44,31 @@ export function scrapeOffer(context: Context) {
 
   function getPrice() {
     return Number(
-      /\d+/
-        .exec(
-          document.getElementsByClassName("offer-price_number")[0].textContent!
-        )![0]
-        .replace(/ /g, "")
+      /\d+/.exec(
+        document
+          .getElementsByClassName("offer-price__number")[0]
+          .textContent!.replace(/ /g, "")
+      )![0]
     );
   }
 
   function getOfferParam(paramName: string): any {
-    return Array.from(document.getElementsByClassName("offer-params__item"))
-      .filter(
-        (element) =>
-          element
-            .getElementsByClassName("offer-params__label")[0]
-            .textContent!.trim() === paramName
-      )[0]
-      .getElementsByClassName("offer-params__value")[0]
-      .textContent!.trim();
+    let param;
+    let paramList = Array.from(
+      document.getElementsByClassName("offer-params__item")
+    ).filter(
+      (element) =>
+        element
+          .getElementsByClassName("offer-params__label")[0]
+          .textContent!.trim() === paramName
+    )[0];
+
+    if (paramList) {
+      param = paramList
+        .getElementsByClassName("offer-params__value")[0]
+        .textContent!.trim();
+    }
+    return param;
   }
 
   function getFuelType() {
@@ -75,5 +81,8 @@ export function scrapeOffer(context: Context) {
     return getOfferParam("Skrzynia biegów") !== "Manualna"
       ? context.extras.TransmissionType.MANUAL
       : context.extras.TransmissionType.AUTO;
+  }
+  function getParamAsNumber(paramName: string) {
+    return Number(/\d+/.exec(getOfferParam(paramName).replace(/ /g, "")));
   }
 }
